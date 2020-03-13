@@ -25,6 +25,13 @@ import random
 
 import numpy as np
 from tqdm import tqdm, trange
+
+import torch
+from torch.utils.data import (
+    DataLoader, RandomSampler, SequentialSampler, TensorDataset
+)
+from torch.utils.data.distributed import DistributedSampler
+
 from transformers import (
     AdamW, AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer,
     BertConfig, BertForSequenceClassification, BertTokenizer, DistilBertConfig,
@@ -38,12 +45,6 @@ from transformers import (
     XLMRobertaForSequenceClassification, XLMRobertaTokenizer, XLMTokenizer,
     XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer
 )
-
-import torch
-from torch.utils.data import (
-    DataLoader, RandomSampler, SequentialSampler, TensorDataset
-)
-from torch.utils.data.distributed import DistributedSampler
 
 try:
     from torch.utils.tensorboard import SummaryWriter
@@ -419,28 +420,28 @@ def main():
         default=None,
         type=str,
         required=True,
-        help="Model type selected in the list: " + ", ".join(MODEL_CLASSES.keys()),  # noqa: E501
+        help="Model type selected in the list: " + ", ".join(MODEL_CLASSES.keys()),  # noqa: E501 E251
     )
     parser.add_argument(
         "--model_name_or_path",
         default=None,
         type=str,
         required=True,
-        help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),  # noqa: E501
+        help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),  # noqa: E501 E251
     )
     parser.add_argument(
         "--task_name",
         default=None,
         type=str,
         required=True,
-        help="The name of the task to train selected in the list: " + ", ".join(processors.keys()),  # noqa: E501
+        help="The name of the task to train selected in the list: " + ", ".join(processors.keys()),  # noqa: E501 E251
     )
     parser.add_argument(
         "--output_dir",
         default=None,
         type=str,
         required=True,
-        help="The output directory where the model predictions and checkpoints will be written.",  # noqa: E501
+        help="The output directory where the model predictions and checkpoints will be written.",  # noqa: E501 E251
     )
 
     # Other parameters
