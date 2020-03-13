@@ -1,0 +1,1 @@
+python ../scripts/download_glue.py --data_dir='glue_data' --tasks='MRPC'
