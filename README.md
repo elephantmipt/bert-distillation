@@ -8,3 +8,16 @@
 6. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
 7. `serving` - microservices, etc - production
 8. `src` - model, experiment, etc - research
+
+## Usage
+
+1. Clone repository
+2. run `pip install -r requiriments/requiriments-dev.txt`
+3. write some code
+4. run `make codestyle`
+5. run `make check-codestyle`
+6. if exit code is not 0 refactor your code
+7. commit!
+
+## Useful links
+
