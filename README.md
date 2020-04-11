@@ -19,7 +19,10 @@
 6. if exit code is not 0 refactor your code
 7. commit!
 
+Also read this at least once
+https://www.notion.so/Engineering-Guidelines-cc80b8268eed43d6a96b12aa8444b4ca
+
 ## Useful links
 
 ### Notion
-https://www.notion.so/d0a6296fba334043ad696d3844029a2b?v=67f75805cffa46a3b2a78f72d125054f
+https://www.notion.so/1d312fd286104ccbb06069602fa83529?v=b2d8d1b70fe34dbda5a6aa401822ebc7
