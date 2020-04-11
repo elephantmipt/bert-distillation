@@ -21,3 +21,5 @@
 
 ## Useful links
 
+### Notion
+https://www.notion.so/d0a6296fba334043ad696d3844029a2b?v=67f75805cffa46a3b2a78f72d125054f
