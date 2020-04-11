@@ -12,7 +12,7 @@
 ## Usage
 
 1. Clone repository
-2. run `pip install -r requiriments/requiriments-dev.txt`
+2. run `pip install -r requirements/requirements-dev.txt`
 3. write some code
 4. run `make codestyle`
 5. run `make check-codestyle`
