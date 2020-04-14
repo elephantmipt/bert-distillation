@@ -130,7 +130,7 @@ class MLMDataset(Dataset):
 
         attention_mask = torch.ones_like(x_encoded, dtype=torch.int8)
         mask_pad = torch.zeros_like(pad_ids, dtype=torch.int8)
-        attention_mask = torch.cat((attention_mask, mask_pad))
+        attention_mask = torch.cat((attention_mask, mask_pad)).type(torch.bool)
         output_dict = {
             "features": x_tensor,
             "attention_mask": attention_mask,
