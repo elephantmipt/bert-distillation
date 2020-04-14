@@ -20,3 +20,5 @@ jobs:
           pip install -r requirements/requirements.txt -r requirements/requirements-dev.txt
       - name: Check codestyle
         run: make check-codestyle
+      - name: Run tests
+        run: pytest src/test.py
