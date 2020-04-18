@@ -19,6 +19,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/requirements.txt -r requirements/requirements-dev.txt
       - name: Check codestyle
-        run: make check-codestyle
+        run: catalyst-check-codestyle
       - name: Run tests
         run: pytest src/test.py

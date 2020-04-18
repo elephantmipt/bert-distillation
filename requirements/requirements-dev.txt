@@ -6,3 +6,4 @@ mock==3.0.5
 pre-commit==1.20.0
 isort==4.3.21
 transformers>=2.3.0
+catalyst-codestyle
