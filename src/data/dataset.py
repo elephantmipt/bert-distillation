@@ -1,7 +1,7 @@
+from typing import List, Mapping
 from collections import Counter
 import logging
 import math
-from typing import List, Mapping
 
 from tqdm.auto import tqdm
 from transformers import AutoTokenizer
@@ -18,9 +18,9 @@ class MLMDataset(Dataset):
         texts: List[str],
         max_seq_length: int = 512,
         model_name: str = "distilbert-base-uncased",
-        probs_smothing: float = .75,
-        mask_prob: float = .5,
-        device: torch.device = torch.device("cpu")
+        probs_smothing: float = 0.75,
+        mask_prob: float = 0.5,
+        device: torch.device = None,
     ):
         """
         Args:
@@ -35,7 +35,8 @@ class MLMDataset(Dataset):
         """
         self.texts = texts
         self.max_seq_length = max_seq_length
-
+        if device is None:
+            device = torch.device("cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         # suppresses tokenizer warnings
         logging.getLogger("transformers.tokenization_utils").setLevel(
@@ -54,14 +55,13 @@ class MLMDataset(Dataset):
         self.device = device
 
         word_counter = Counter()
-        pbar = tqdm(texts,
-                    desc="Counting probabilities")
+        pbar = tqdm(texts, desc="Counting probabilities")
         for text in pbar:
             text_encoded = self.tokenizer.encode(
                 text,
                 add_special_tokens=True,
                 max_length=self.max_seq_length,
-                return_tensors="pt"
+                return_tensors="pt",
             ).squeeze(0)
             word_counter.update(text_encoded)
 
@@ -72,8 +72,7 @@ class MLMDataset(Dataset):
         for k, v in word_counter.items():
             counts[k] = v
         self.counts = counts
-        self.token_probs =\
-            (self.counts / self.counts.sum()) ** probs_smothing
+        self.token_probs = (self.counts / self.counts.sum()) ** probs_smothing
 
     def __len__(self) -> int:
         """
@@ -107,14 +106,13 @@ class MLMDataset(Dataset):
         x_prob = self.token_probs[x_tensor.flatten()]
         mask_number = math.ceil(self.mask_prob * true_seq_length)
 
-        tgt_ids = torch.multinomial(x_prob / x_prob.sum(),
-                                    mask_number, replacement=False)
+        tgt_ids = torch.multinomial(
+            x_prob / x_prob.sum(), mask_number, replacement=False
+        )
 
         mlm_labels = x_tensor.new(x_tensor.size()).copy_(x_tensor)
         pred_mask = torch.zeros(
-            self.max_seq_length,
-            dtype=torch.bool,
-            device=self.device
+            self.max_seq_length, dtype=torch.bool, device=self.device
         )  # previously `dtype=torch.uint8`, cf pytorch 1.2.0 compatibility
 
         pred_mask[tgt_ids] = 1

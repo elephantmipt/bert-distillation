@@ -10,12 +10,14 @@ from .runners import DistilMLMRunner
 
 
 def test_dataset():
+    """Test number of tokens"""
     dataset = MLMDataset(["Hello, world"])
     output_dict = dataset[0]
     assert output_dict["attention_mask"].sum() == 5
 
 
 def test_runner():
+    """Test that runner executes"""
     train_df = pd.read_csv("data/train.csv")
     valid_df = pd.read_csv("data/valid.csv")
     teacher_config = AutoConfig.from_pretrained(
@@ -28,7 +30,7 @@ def test_runner():
     student_config = AutoConfig.from_pretrained(
         "distilbert-base-uncased",
         output_hidden_states=True,
-        output_logits=True
+        output_logits=True,
     )
     student = DistilBertForMaskedLM.from_pretrained(
         "distilbert-base-uncased", config=student_config
