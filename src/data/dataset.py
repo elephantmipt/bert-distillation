@@ -3,11 +3,10 @@ from collections import Counter
 import logging
 import math
 
-from tqdm.auto import tqdm
-from transformers import AutoTokenizer
-
 import torch
 from torch.utils.data import Dataset
+from tqdm.auto import tqdm
+from transformers import AutoTokenizer
 
 
 class MLMDataset(Dataset):

@@ -1,11 +1,10 @@
 from typing import Dict
 
+from catalyst import dl
+from catalyst.utils import is_wrapped_with_ddp
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-
-from catalyst import dl
-from catalyst.utils import is_wrapped_with_ddp
 
 
 class DistilMLMRunner(dl.Runner):

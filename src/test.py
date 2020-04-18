@@ -1,9 +1,8 @@
 import pandas as pd
 import pytest  # noqa: F401
-from transformers import AutoConfig, BertForMaskedLM, DistilBertForMaskedLM
-
 import torch
 from torch.utils.data import DataLoader
+from transformers import AutoConfig, BertForMaskedLM, DistilBertForMaskedLM
 
 from .data import MLMDataset
 from .runners import DistilMLMRunner
