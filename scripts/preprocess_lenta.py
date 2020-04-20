@@ -1,5 +1,5 @@
-import pandas as pd
 import re
+import pandas as pd
 filename = 'data/lenta-ru-news.csv'
 df = pd.read_csv(filename)
 
