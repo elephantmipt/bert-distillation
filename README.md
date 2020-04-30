@@ -10,9 +10,20 @@
 8. `src` - model, experiment, etc - research
 
 ## Usage
+```
+git clone https://github.com/PUSSYMIPT/bert-distillation.git
+pip install -r requirements/requirements.txt
+bin/download_lenta.sh
+python scripts/split_dataset.py --small
+catalyst-dl run -C configs.yml --verbose
+```
+Let's go get some drinks.
+
+
+## Contribution
 
 1. Clone repository
-2. run `pip install -r requirements/requirements-dev.txt`
+2. run `pip install -r requirements/requirements-dev.txt -r requirements/requirements.txt`
 3. write some code
 4. run `catalyst-make-codestyle`
 5. run `catalyst-check-codestyle`
@@ -21,8 +32,3 @@
 
 Also read this at least once
 https://www.notion.so/Engineering-Guidelines-cc80b8268eed43d6a96b12aa8444b4ca
-
-## Useful links
-
-### Notion
-https://www.notion.so/1d312fd286104ccbb06069602fa83529?v=b2d8d1b70fe34dbda5a6aa401822ebc7
