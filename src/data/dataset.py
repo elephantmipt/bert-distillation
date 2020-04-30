@@ -16,9 +16,9 @@ class MLMDataset(Dataset):
         self,
         texts: List[str],
         max_seq_length: int = 512,
-        model_name: str = "distilbert-base-uncased",
+        model_name: str = "bert-base-uncased",
         probs_smothing: float = 0.75,
-        mask_prob: float = 0.5,
+        mask_prob: float = 0.15,
         device: torch.device = None,
     ):
         """
