@@ -17,7 +17,7 @@ bin/download_lenta.sh
 python scripts/split_dataset.py --small
 catalyst-dl run -C configs.yml --verbose
 ```
-Let's go get some drinks.
+It will take a lot of time. "Let's go get some drinks"
 
 
 ## Contribution
