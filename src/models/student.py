@@ -1,23 +1,23 @@
+from typing import Dict, List
+
 import torch
 from torch import nn
 import transformers
 
-from typing import List, Dict
-
 
 class DistilbertStudentModel(nn.Module):
-    def __init__(
-        self,
-        teacher_model_name: str = "bert-base-uncased",
-        layers=None
-    ):
-        
-        """
-        DistilbertStudentModel
-        Distil model class based on huggingface class but with 
-        initialization in it. Model will take vocabulary
-        layers from specified teacher model
+    """
+    DistilbertStudentModel
 
+    Distil model class based on huggingface class but with
+    initialization in it. Model will take vocabulary
+    layers from specified teacher model
+    """
+
+    def __init__(
+        self, teacher_model_name: str = "bert-base-uncased", layers=None
+    ):
+        """
         Args:
             teacher_model_name: name of the model to distil
             layers: layers indexes to initialize
@@ -26,9 +26,7 @@ class DistilbertStudentModel(nn.Module):
         if layers is None:
             layers = [0, 2, 4, 7, 9, 11]
         teacher_config = transformers.AutoConfig.from_pretrained(
-            teacher_model_name,
-            output_hidden_states=True,
-            output_logits=True
+            teacher_model_name, output_hidden_states=True, output_logits=True
         )
         teacher = transformers.BertForMaskedLM.from_pretrained(
             teacher_model_name, config=teacher_config
@@ -43,7 +41,7 @@ class DistilbertStudentModel(nn.Module):
             self.student = transformers.DistilBertForMaskedLM.from_pretrained(
                 "distilbert-base-uncased",
                 config=student_config,
-                state_dict=distil_sd
+                state_dict=distil_sd,
             )
         elif teacher_model_name == "bert-base-cased":
             student_config = transformers.AutoConfig.from_pretrained(
@@ -54,7 +52,7 @@ class DistilbertStudentModel(nn.Module):
             self.student = transformers.DistilBertForMaskedLM.from_pretrained(
                 "distilbert-base-cased",
                 config=student_config,
-                state_dict=distil_sd
+                state_dict=distil_sd,
             )
         else:
             student_config = transformers.AutoConfig.from_pretrained(
@@ -65,13 +63,12 @@ class DistilbertStudentModel(nn.Module):
             self.student = transformers.DistilBertForMaskedLM.from_pretrained(
                 "distilbert-base-multilingual-cased",
                 config=student_config,
-                state_dict=distil_sd
+                state_dict=distil_sd,
             )
 
-
     def forward(self, *model_args, **model_kwargs):
+        """Forward nethod"""
         return self.student(*model_args, **model_kwargs)
-
 
     @staticmethod
     def _extract(
@@ -94,11 +91,13 @@ class DistilbertStudentModel(nn.Module):
 
         # extract embeddings
         for w in ["word_embeddings", "position_embeddings"]:
-            compressed_sd[f"{prefix_student}.embeddings.{w}.weight"] = \
-                state_dict[f"{prefix_teacher}.embeddings.{w}.weight"]
+            compressed_sd[
+                f"{prefix_student}.embeddings.{w}.weight"
+            ] = state_dict[f"{prefix_teacher}.embeddings.{w}.weight"]
         for w in ["weight", "bias"]:
-            compressed_sd[f"{prefix_student}.embeddings.LayerNorm.{w}"] = \
-                state_dict[f"{prefix_teacher}.embeddings.LayerNorm.{w}"]
+            compressed_sd[
+                f"{prefix_student}.embeddings.LayerNorm.{w}"
+            ] = state_dict[f"{prefix_teacher}.embeddings.LayerNorm.{w}"]
         # extract encoder
         std_idx = 0
         for teacher_idx in layers:
@@ -148,15 +147,19 @@ class DistilbertStudentModel(nn.Module):
 
             std_idx += 1
         # extract vocab
-        compressed_sd[f"vocab_projector.weight"] = \
-            state_dict[f"cls.predictions.decoder.weight"]
-        compressed_sd[f"vocab_projector.bias"] = \
-            state_dict[f"cls.predictions.bias"]
+        compressed_sd[f"vocab_projector.weight"] = state_dict[
+            f"cls.predictions.decoder.weight"
+        ]
+        compressed_sd[f"vocab_projector.bias"] = state_dict[
+            f"cls.predictions.bias"
+        ]
 
         for w in ["weight", "bias"]:
-            compressed_sd[f"vocab_transform.{w}"] = \
-                state_dict[f"cls.predictions.transform.dense.{w}"]
-            compressed_sd[f"vocab_layer_norm.{w}"] = \
-                state_dict[f"cls.predictions.transform.LayerNorm.{w}"]
+            compressed_sd[f"vocab_transform.{w}"] = state_dict[
+                f"cls.predictions.transform.dense.{w}"
+            ]
+            compressed_sd[f"vocab_layer_norm.{w}"] = state_dict[
+                f"cls.predictions.transform.LayerNorm.{w}"
+            ]
 
         return compressed_sd

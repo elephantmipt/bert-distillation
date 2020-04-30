@@ -40,12 +40,14 @@ class DistilMLMRunner(dl.Runner):
 
         teacher.eval()
         with torch.no_grad():
-            t_logits, t_hidden_state = \
-                teacher(batch["features"], batch["attention_mask"])
+            t_logits, t_hidden_state = teacher(
+                batch["features"], batch["attention_mask"]
+            )
 
         student.train()
-        s_logits, s_hidden_states = \
-            student(batch["features"], batch["attention_mask"])
+        s_logits, s_hidden_states = student(
+            batch["features"], batch["attention_mask"]
+        )
         mask = batch["attention_mask"].unsqueeze(-1).expand_as(s_logits)
         # (bs, seq_lenth, voc_size)
         s_logits_slct = torch.masked_select(s_logits, mask)
