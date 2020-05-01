@@ -47,7 +47,7 @@ stages:
   # params specific for stage 1 called "train_val"
   train_val:
     state_params:
-      num_epochs: 3
+      num_epochs: 100
     optimizer_params:
-      optimizer: Adam
+      optimizer: RAdam
       lr: 0.00005
