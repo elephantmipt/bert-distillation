@@ -132,8 +132,3 @@ class DistilMLMRunner(dl.Runner):
             self.state.batch_metrics["loss_cos"] = loss_cos
         if self.alpha_mse > 0:
             self.state.batch_metrics["loss_mse"] = loss_mse
-
-        if self.state.is_train_loader:
-            loss.backward()
-            self.state.optimizer.step()
-            self.state.optimizer.zero_grad()

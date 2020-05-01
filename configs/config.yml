@@ -21,13 +21,13 @@ stages:
   # PyTorch loader params
   data_params:
     batch_size: 2
-    num_workers: 1
+    num_workers: 4
     path_to_data: "./data"
     train_filename: "train_small.csv"
     valid_filename: "valid_small.csv"
     text_field: "text"
     model_name: "DeepPavlov/rubert-base-cased"
-    max_sequence_length: 512
+    max_sequence_length: 256
 
   state_params:
     main_metric: &reduced_metric loss
@@ -40,9 +40,25 @@ stages:
   # callbacks serve to calculate loss and metric,
   # update model weights, save checkpoint etc.
   callbacks_params:
+    optimizer:
+      callback: OptimizerCallback
+      accumulation_steps: 4
     scheduler:
       callback: SchedulerCallback
       reduced_metric: *reduced_metric
+    wandb_loger:
+      callback: WandbLogger
+      metric_names:
+        - loss
+        - mlm_loss
+        - cos_loss
+        - kl_loss
+      config:
+        lr: 0.00005
+        optimizer: RAdam
+        
+        
+
 
   # params specific for stage 1 called "train_val"
   train_val:
