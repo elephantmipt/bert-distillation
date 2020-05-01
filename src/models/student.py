@@ -15,12 +15,17 @@ class DistilbertStudentModel(nn.Module):
     """
 
     def __init__(
-        self, teacher_model_name: str = "bert-base-uncased", layers=None
+        self,
+        teacher_model_name: str = "bert-base-uncased",
+        layers: List[int] = None,
+        extract: bool = True,
     ):
         """
         Args:
             teacher_model_name: name of the model to distil
             layers: layers indexes to initialize
+            extract: bool flag, if you want to initialize your model with
+                layers of the teacher model then set this to true
         """
         super().__init__()
         if layers is None:
@@ -31,7 +36,9 @@ class DistilbertStudentModel(nn.Module):
         teacher = transformers.BertForMaskedLM.from_pretrained(
             teacher_model_name, config=teacher_config
         )
-        distil_sd = self._extract(teacher, layers)
+        distil_sd = None
+        if extract:
+            distil_sd = self._extract(teacher, layers)
         if teacher_model_name == "bert-base-uncased":
             student_config = transformers.AutoConfig.from_pretrained(
                 "distilbert-base-uncased",
