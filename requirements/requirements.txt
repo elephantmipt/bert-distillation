@@ -2,3 +2,4 @@ alchemy-catalyst
 catalyst
 transformers
 reaction
+torch_optimizer
