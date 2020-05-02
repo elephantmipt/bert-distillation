@@ -27,7 +27,8 @@ stages:
     valid_filename: "valid_small.csv"
     text_field: "text"
     model_name: "DeepPavlov/rubert-base-cased"
-    max_sequence_length: 256
+    max_sequence_length: 300
+    shuffle: True
 
   state_params:
     main_metric: &reduced_metric loss
@@ -48,11 +49,6 @@ stages:
       reduced_metric: *reduced_metric
     wandb_loger:
       callback: WandbLogger
-      metric_names:
-        - loss
-        - mlm_loss
-        - cos_loss
-        - kl_loss
       config:
         lr: 0.00005
         optimizer: RAdam

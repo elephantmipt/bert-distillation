@@ -1,3 +1,4 @@
+from catalyst import dl
 import pandas as pd
 import pytest  # noqa: F401
 import torch
@@ -50,6 +51,12 @@ def test_runner():
         loaders=loaders,
         verbose=True,
         num_epochs=3,
+        callbacks={
+            "optimizer": dl.OptimizerCallback(
+                metric_key="loss",  # you can also pass 'mae' to optimize it instea
+                accumulation_steps=1,  # also you can pass any number of steps for gradient accumulation
+            )
+        },
     )
     assert True
 
