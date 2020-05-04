@@ -68,7 +68,7 @@ class DistilMLMRunner(dl.Runner):
         # (bs * seq_length * voc_size) modulo the 1s in mask
         t_logits_slct = t_logits_slct.view(-1, s_logits.size(-1))
         # (bs * seq_length, voc_size) modulo the 1s in mask
-        
+
         loss = 0
         if self.alpha_kl > 0.0:
             loss_kl = self.kl_loss_fct(
@@ -80,7 +80,8 @@ class DistilMLMRunner(dl.Runner):
 
         if self.alpha_mlm > 0.0:
             loss_mlm = self.lm_loss_fct(
-                s_logits.view(-1, s_logits.size(-1)), batch["mlm_labels"].view(-1)
+                s_logits.view(-1, s_logits.size(-1)),
+                batch["mlm_labels"].view(-1),
             )
             loss += self.alpha_mlm * loss_mlm
             self.state.batch_metrics["loss_mlm"] = loss_mlm
