@@ -53,8 +53,7 @@ def test_runner():
         num_epochs=3,
         callbacks={
             "optimizer": dl.OptimizerCallback(
-                metric_key="loss",  # you can also pass 'mae' to optimize it instea
-                accumulation_steps=1,  # also you can pass any number of steps for gradient accumulation
+                metric_key="loss", accumulation_steps=1,
             )
         },
     )
