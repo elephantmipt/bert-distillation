@@ -3,3 +3,4 @@ catalyst
 transformers
 reaction
 torch_optimizer
+wandb
