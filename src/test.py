@@ -51,9 +51,7 @@ def test_runner():
         loaders=loaders,
         verbose=True,
         num_epochs=3,
-        callbacks={
-            "optimizer": dl.OptimizerCallback()
-        },
+        callbacks={"optimizer": dl.OptimizerCallback()},
     )
     assert True
 
