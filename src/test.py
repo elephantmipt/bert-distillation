@@ -52,9 +52,7 @@ def test_runner():
         verbose=True,
         num_epochs=3,
         callbacks={
-            "optimizer": dl.OptimizerCallback(
-                metric_key="loss", accumulation_steps=1,
-            )
+            "optimizer": dl.OptimizerCallback()
         },
     )
     assert True
