@@ -1,3 +1,4 @@
+from catalyst.contrib.dl.callbacks.wandb import WandbLogger
 from catalyst.dl import registry
 from torch_optimizer import Ranger
 
@@ -9,3 +10,5 @@ registry.Model(BertForMLM)
 registry.Model(DistilbertStudentModel)
 
 registry.Optimizer(Ranger)
+
+registry.Callback(WandbLogger)

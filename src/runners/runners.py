@@ -53,8 +53,7 @@ class DistilMLMRunner(dl.Runner):
             t_logits, t_hidden_states = teacher(
                 batch["features"], batch["attention_mask"]
             )
-
-        student.train()
+        
         s_logits, s_hidden_states = student(
             batch["features"], batch["attention_mask"]
         )
