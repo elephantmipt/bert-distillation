@@ -16,7 +16,7 @@ cd bert-distillation
 pip install -r requirements/requirements.txt
 bin/download_lenta.sh
 python scripts/split_dataset.py --small
-catalyst-dl run -C configs/config.yml --verbose
+catalyst-dl run -C configs/config_ru_ranger.yml --verbose --distributed
 ```
 It will take a lot of time. "Let's go get some drinks"
 

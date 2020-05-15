@@ -1,6 +1,7 @@
 from typing import Dict
 
 from catalyst import dl
+from catalyst.dl.utils import is_wrapped_with_ddp
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -39,7 +40,13 @@ class DistilMLMRunner(dl.Runner):
             self.cosine_loss_fct = nn.CosineEmbeddingLoss(reduction="mean")
 
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
-        teacher, student = self.model["teacher"], self.model["student"]
+        if is_wrapped_with_ddp():
+            teacher, student = (
+                self.model.module["teacher"],
+                self.model.module["student"],
+            )
+        else:
+            teacher, student = self.model["teacher"], self.model["student"]
         teacher.eval()
         with torch.no_grad():
             t_logits, t_hidden_states = teacher(

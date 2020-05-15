@@ -16,6 +16,8 @@ RUN pip install --upgrade pip
 
 RUN pip install --no-cache-dir -r requirements/requirements.txt
 
+RUN apt install wget gunzip -y
+
 RUN bash bin/download_lenta.sh
 
 RUN python scripts/split_dataset.py --small --sample 10000
