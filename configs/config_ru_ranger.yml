@@ -1,0 +1,77 @@
+# Refer to configs/config-description-eng.yml
+# for detailed comments on this configuration file
+
+runner_params:
+  alpha_kl: 0.5
+  alpha_cos: 0.5
+  alpha_mlm: 0.001
+  alpha_mse: 0.0
+
+model_params:
+  _key_value: true
+  teacher: 
+    model: BertForMLM
+    model_name: "DeepPavlov/rubert-base-cased"
+  student: 
+    model: DistilbertStudentModel
+    teacher_model_name: "DeepPavlov/rubert-base-cased"
+
+args:
+  # where to look for __init__.py file
+  expdir: "src"
+  # store logs in this subfolder
+  baselogdir: "./logs/distilbert_mult_start"
+
+# common settings for all stages
+stages:
+  # PyTorch loader params
+  data_params:
+    batch_size: 2
+    num_workers: 4
+    path_to_data: "./data"
+    train_filename: "train_small.csv"
+    valid_filename: "valid_small.csv"
+    text_field: "text"
+    model_name: "DeepPavlov/rubert-base-cased"
+    max_sequence_length: 256
+    shuffle: True
+
+  state_params:
+    main_metric: &reduced_metric loss
+    minimize_metric: True
+
+  # scheduler controls learning rate during training
+  scheduler_params:
+    scheduler: ReduceLROnPlateau
+
+  # callbacks serve to calculate loss and metric,
+  # update model weights, save checkpoint etc.
+  callbacks_params:
+    optimizer:
+      callback: OptimizerCallback
+      accumulation_steps: 8
+    scheduler:
+      callback: SchedulerCallback
+      reduced_metric: *reduced_metric
+      
+    wandb_loger:
+      callback: WandbLogger
+      config:
+        lr: 0.0001
+        optimizer: Ranger
+        
+  scheduler_params:
+      gamma: 0.3
+      milestones:
+      - 50
+      - 100
+      scheduler: MultiStepLR
+
+
+  # params specific for stage 1 called "train_val"
+  train_val:
+    state_params:
+      num_epochs: 150
+    optimizer_params:
+      optimizer: Ranger
+      lr: 0.0001
