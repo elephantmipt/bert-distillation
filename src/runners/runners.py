@@ -40,7 +40,7 @@ class DistilMLMRunner(dl.Runner):
             self.cosine_loss_fct = nn.CosineEmbeddingLoss(reduction="mean")
 
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
-        if is_wrapped_with_ddp():
+        if is_wrapped_with_ddp(self.model):
             teacher, student = (
                 self.model.module["teacher"],
                 self.model.module["student"],

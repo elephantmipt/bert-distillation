@@ -20,6 +20,16 @@ catalyst-dl run -C configs/config_ru_ranger.yml --verbose --distributed
 ```
 It will take a lot of time. "Let's go get some drinks"
 
+### Docker
+
+I also add dockerfile.
+```
+git clone https://github.com/PUSSYMIPT/bert-distillation.git
+cd bert-distillation
+docker build -f docker/Dockerfile  # yields container id
+docker run {your container id}
+```
+
 
 ## Contribution
 
