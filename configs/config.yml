@@ -3,10 +3,10 @@
 
 model_params:
   _key_value: true
-  teacher: 
+  teacher:
     model: BertForMLM
     model_name: "DeepPavlov/rubert-base-cased"
-  student: 
+  student:
     model: DistilbertStudentModel
     teacher_model_name: "DeepPavlov/rubert-base-cased"
 
@@ -52,9 +52,6 @@ stages:
       config:
         lr: 0.00005
         optimizer: RAdam
-        
-        
-
 
   # params specific for stage 1 called "train_val"
   train_val:
