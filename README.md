@@ -1,7 +1,6 @@
 # Bert Distillation
 
 [![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
-
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/CI/badge.svg?branch=master&event=push)
 
 
