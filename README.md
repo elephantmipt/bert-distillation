@@ -1,5 +1,10 @@
 # Bert Distillation
 
+[![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
+
+![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/CI/badge.svg?branch=master&event=push)
+
+
 1. `bin` - bash files for running pipelines
 2. `configs` - just place configs here
 3. `docker` - project Docker files for pure reproducibility
