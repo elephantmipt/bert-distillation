@@ -47,7 +47,8 @@ class DistilMLMRunner(dl.Runner):
             )
         else:
             teacher, student = self.model["teacher"], self.model["student"]
-        teacher.eval()
+
+        teacher.eval()  # manually set teacher model to eval mode
         with torch.no_grad():
             t_logits, t_hidden_states = teacher(
                 batch["features"], batch["attention_mask"]
@@ -56,6 +57,7 @@ class DistilMLMRunner(dl.Runner):
         s_logits, s_hidden_states = student(
             batch["features"], batch["attention_mask"]
         )
+
         mask = batch["attention_mask"].unsqueeze(-1).expand_as(s_logits)
         # (bs, seq_lenth, voc_size)
         s_logits_slct = torch.masked_select(s_logits, mask)
@@ -94,38 +96,45 @@ class DistilMLMRunner(dl.Runner):
             self.state.batch_metrics["loss_mse"] = loss_mse
 
         if self.alpha_cos > 0.0:
-            s_hidden_states = s_hidden_states[-1]  # (bs, seq_length, dim)
-            t_hidden_states = t_hidden_states[-1]  # (bs, seq_length, dim)
-            mask = (
-                batch["attention_mask"]
-                .unsqueeze(-1)
-                .expand_as(s_hidden_states)
-            )  # (bs, seq_length, dim)
-            assert s_hidden_states.size() == t_hidden_states.size()
-            dim = s_hidden_states.size(-1)
-
-            s_hidden_states_slct = torch.masked_select(
-                s_hidden_states, mask
-            )  # (bs * seq_length * dim)
-            s_hidden_states_slct = s_hidden_states_slct.view(
-                -1, dim
-            )  # (bs * seq_length, dim)
-            t_hidden_states_slct = torch.masked_select(
-                t_hidden_states, mask
-            )  # (bs * seq_length * dim)
-            t_hidden_states_slct = t_hidden_states_slct.view(
-                -1, dim
-            )  # (bs * seq_length, dim)
-
-            target = s_hidden_states_slct.new(
-                s_hidden_states_slct.size(0)
-            ).fill_(
-                1
-            )  # (bs * seq_length,)
-            loss_cos = self.cosine_loss_fct(
-                s_hidden_states_slct, t_hidden_states_slct, target
+            loss_cos = self._loss_cos(
+                s_hidden_states, t_hidden_states, batch["attention_mask"]
             )
             loss += self.alpha_cos * loss_cos
             self.state.batch_metrics["loss_cos"] = loss_cos
 
         self.state.batch_metrics["loss"] = loss
+
+    def _loss_cos(
+        self,
+        s_hidden_states: torch.Tensor,
+        t_hidden_states: torch.Tensor,
+        attention_mask: torch.Tensor,
+    ) -> torch.Tensor:
+        s_hidden_states = s_hidden_states[-1]  # (bs, seq_length, dim)
+        t_hidden_states = t_hidden_states[-1]  # (bs, seq_length, dim)
+        mask = attention_mask.unsqueeze(-1).expand_as(
+            s_hidden_states
+        )  # (bs, seq_length, dim)
+        assert s_hidden_states.size() == t_hidden_states.size()
+        dim = s_hidden_states.size(-1)
+
+        s_hidden_states_slct = torch.masked_select(
+            s_hidden_states, mask
+        )  # (bs * seq_length * dim)
+        s_hidden_states_slct = s_hidden_states_slct.view(
+            -1, dim
+        )  # (bs * seq_length, dim)
+        t_hidden_states_slct = torch.masked_select(
+            t_hidden_states, mask
+        )  # (bs * seq_length * dim)
+        t_hidden_states_slct = t_hidden_states_slct.view(
+            -1, dim
+        )  # (bs * seq_length, dim)
+
+        target = s_hidden_states_slct.new(s_hidden_states_slct.size(0)).fill_(
+            1
+        )  # (bs * seq_length,)
+        loss_cos = self.cosine_loss_fct(
+            s_hidden_states_slct, t_hidden_states_slct, target
+        )
+        return loss_cos
