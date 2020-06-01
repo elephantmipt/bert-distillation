@@ -1,6 +1,6 @@
 alchemy-catalyst
 catalyst==20.5
-transformers
+transformers>=1.9
 reaction
 torch_optimizer
 wandb

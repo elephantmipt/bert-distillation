@@ -49,16 +49,17 @@ class DistilMLMRunner(dl.Runner):
             teacher, student = self.model["teacher"], self.model["student"]
 
         teacher.eval()  # manually set teacher model to eval mode
+        attention_mask = batch["input_ids"] != 0
         with torch.no_grad():
             t_logits, t_hidden_states = teacher(
-                batch["features"], batch["attention_mask"]
+                batch["input_ids"], attention_mask
             )
 
         s_logits, s_hidden_states = student(
-            batch["features"], batch["attention_mask"]
+            batch["input_ids"], attention_mask
         )
 
-        mask = batch["attention_mask"].unsqueeze(-1).expand_as(s_logits)
+        mask = attention_mask.unsqueeze(-1).expand_as(s_logits)
         # (bs, seq_lenth, voc_size)
         s_logits_slct = torch.masked_select(s_logits, mask)
         # (bs * seq_length * voc_size) modulo the 1s in mask
@@ -81,7 +82,7 @@ class DistilMLMRunner(dl.Runner):
         if self.alpha_mlm > 0.0:
             loss_mlm = self.lm_loss_fct(
                 s_logits.view(-1, s_logits.size(-1)),
-                batch["mlm_labels"].view(-1),
+                batch["masked_lm_labels"].view(-1),
             )
             loss += self.alpha_mlm * loss_mlm
             self.state.batch_metrics["loss_mlm"] = loss_mlm
