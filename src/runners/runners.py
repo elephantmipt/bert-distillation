@@ -96,7 +96,7 @@ class DistilMLMRunner(dl.Runner):
 
         if self.alpha_cos > 0.0:
             loss_cos = self._loss_cos(
-                s_hidden_states, t_hidden_states, batch["attention_mask"]
+                s_hidden_states, t_hidden_states, attention_mask
             )
             loss += self.alpha_cos * loss_cos
             self.state.batch_metrics["loss_cos"] = loss_cos
