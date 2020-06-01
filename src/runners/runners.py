@@ -55,9 +55,7 @@ class DistilMLMRunner(dl.Runner):
                 batch["input_ids"], attention_mask
             )
 
-        s_logits, s_hidden_states = student(
-            batch["input_ids"], attention_mask
-        )
+        s_logits, s_hidden_states = student(batch["input_ids"], attention_mask)
 
         mask = attention_mask.unsqueeze(-1).expand_as(s_logits)
         # (bs, seq_lenth, voc_size)
