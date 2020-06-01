@@ -95,6 +95,7 @@ class DistilMLMRunner(dl.Runner):
             loss += self.alpha_mse * loss_mse
             self.state.batch_metrics["loss_mse"] = loss_mse
 
+        import ipdb; ipdb.set_trace()
         if self.alpha_cos > 0.0:
             loss_cos = self._loss_cos(
                 s_hidden_states, t_hidden_states, batch["attention_mask"]

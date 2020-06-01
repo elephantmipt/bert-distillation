@@ -1,5 +1,5 @@
 alchemy-catalyst
-catalyst==20.4.1
+catalyst==20.5
 transformers
 reaction
 torch_optimizer
