@@ -3,7 +3,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 from catalyst.dl import ConfigExperiment
-from catalyst.utils.tools.typing import Model, Optimizer
+from catalyst.tools.typing import Model, Optimizer
 import pandas as pd
 
 from .data import MLMDataset
