@@ -1,4 +1,4 @@
-name: Config API
+name: Linter
 on: [push]
 
 jobs:
