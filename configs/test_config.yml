@@ -41,11 +41,18 @@ stages:
   # callbacks serve to calculate loss and metric,
   # update model weights, save checkpoint etc.
   callbacks_params:
+    cosine_loss:
+      callback: CosineLossCallback
+      prefix: cosine
     optimizer:
       callback: OptimizerCallback
     scheduler:
       callback: SchedulerCallback
       reduced_metric: *reduced_metric
+  criterion_params:
+    _key_value: True
+    cosine_loss:
+      criterion: CosineEmbeddingLoss
 
   # params specific for stage 1 called "train_val"
   train_val:

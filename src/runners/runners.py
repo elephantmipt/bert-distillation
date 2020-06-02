@@ -1,4 +1,5 @@
 from typing import Dict
+from collections import OrderedDict
 
 from catalyst import dl
 from catalyst.dl.utils import is_wrapped_with_ddp
@@ -56,6 +57,11 @@ class DistilMLMRunner(dl.Runner):
             )
 
         s_logits, s_hidden_states = student(batch["input_ids"], attention_mask)
+
+        self.state.output = OrderedDict()
+        self.state.output["attention_mask"] = attention_mask
+        self.state.output["t_hidden_states"] = t_hidden_states
+        self.state.output["s_hidden_states"] = s_hidden_states
 
         mask = attention_mask.unsqueeze(-1).expand_as(s_logits)
         # (bs, seq_lenth, voc_size)
