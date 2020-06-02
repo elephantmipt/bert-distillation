@@ -2,11 +2,13 @@ from typing import Dict, Union
 from collections import OrderedDict
 from pathlib import Path
 
-from catalyst.dl import ConfigExperiment
+from catalyst.contrib.data.nlp import LanguageModelingDataset
+from catalyst.dl import ConfigExperiment, utils
 from catalyst.tools.typing import Model, Optimizer
 import pandas as pd
-
-from .data import MLMDataset
+from torch.utils.data import DataLoader
+from transformers import AutoTokenizer
+from transformers.data.data_collator import DataCollatorForLanguageModeling
 
 
 class Experiment(ConfigExperiment):
@@ -80,19 +82,53 @@ class Experiment(ConfigExperiment):
         train_df = pd.read_csv(path_to_data / train_filename)
         valid_df = pd.read_csv(path_to_data / valid_filename)
 
-        train_dataset = MLMDataset(
+        data_params = dict(self.stages_config[stage]["data_params"])
+        model_name = data_params["model_name"]
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+        train_dataset = LanguageModelingDataset(
             texts=train_df[text_field],
             max_seq_length=max_sequence_length,
-            model_name=model_name,
+            tokenizer=tokenizer,
         )
 
-        valid_dataset = MLMDataset(
+        valid_dataset = LanguageModelingDataset(
             texts=valid_df[text_field],
             max_seq_length=max_sequence_length,
-            model_name=model_name,
+            tokenizer=tokenizer,
         )
 
         datasets["train"] = train_dataset
         datasets["valid"] = valid_dataset
 
         return datasets
+
+    def get_loaders(
+        self, stage: str, epoch: int = None,
+    ) -> "OrderedDict[str, DataLoader]":
+        """
+        Returns loaders for the stage
+        Args:
+            stage: string with stage name
+            epoch: epoch
+
+        Returns:
+            Dict of loaders
+        """
+        data_params = dict(self.stages_config[stage]["data_params"])
+        model_name = data_params["model_name"]
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        collate_fn = DataCollatorForLanguageModeling(tokenizer).collate_batch
+        loaders_params = {
+            "train": {"collate_fn": collate_fn},
+            "valid": {"collate_fn": collate_fn},
+        }
+        loaders = utils.get_loaders_from_params(
+            get_datasets_fn=self.get_datasets,
+            initial_seed=self.initial_seed,
+            stage=stage,
+            loaders_params=loaders_params,
+            **data_params,
+        )
+
+        return loaders

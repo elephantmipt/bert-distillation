@@ -1,9 +1,16 @@
 from catalyst import dl
+from catalyst.contrib.data.nlp import LanguageModelingDataset
 import pandas as pd
 import pytest  # noqa: F401
 import torch
 from torch.utils.data import DataLoader
-from transformers import AutoConfig, BertForMaskedLM, DistilBertForMaskedLM
+from transformers import (
+    AutoConfig,
+    AutoTokenizer,
+    BertForMaskedLM,
+    DistilBertForMaskedLM,
+)
+from transformers.data.data_collator import DataCollatorForLanguageModeling
 
 from .data import MLMDataset
 from .runners import DistilMLMRunner
@@ -35,11 +42,19 @@ def test_runner():
     student = DistilBertForMaskedLM.from_pretrained(
         "distilbert-base-uncased", config=student_config
     )
-    train_dataset = MLMDataset(train_df["text"])
-    valid_dataset = MLMDataset(valid_df["text"])
 
-    train_dataloader = DataLoader(train_dataset, batch_size=2)
-    valid_dataloader = DataLoader(valid_dataset, batch_size=2)
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+
+    train_dataset = LanguageModelingDataset(train_df["text"], tokenizer)
+    valid_dataset = LanguageModelingDataset(valid_df["text"], tokenizer)
+
+    collate_fn = DataCollatorForLanguageModeling(tokenizer).collate_batch
+    train_dataloader = DataLoader(
+        train_dataset, collate_fn=collate_fn, batch_size=2
+    )
+    valid_dataloader = DataLoader(
+        valid_dataset, collate_fn=collate_fn, batch_size=2
+    )
     loaders = {"train": train_dataloader, "valid": valid_dataloader}
 
     model = torch.nn.ModuleDict({"teacher": teacher, "student": student})
