@@ -20,6 +20,6 @@ jobs:
           pip install -r requirements/requirements.txt -r requirements/requirements-dev.txt
       - name: Run tests
         run: |
-          catalyst-dl run -C config/test_config.yml --verbose
+          catalyst-dl run -C configs/test_config.yml --verbose
       - name: Clear logs
         run: rm -rf logs
