@@ -1,10 +1,11 @@
 from typing import Dict, List, Union
 
-from catalyst.core.callbacks import CriterionCallback
+from catalyst.core import MetricCallback
 import torch
+from torch import nn
 
 
-class MaskedLanguageModelCallback(CriterionCallback):
+class MaskedLanguageModelCallback(MetricCallback):
     """
     Callback to compute masked language model loss
     """
@@ -14,7 +15,6 @@ class MaskedLanguageModelCallback(CriterionCallback):
         input_key: Union[str, List[str], Dict[str, str]] = None,
         output_key: Union[str, List[str], Dict[str, str]] = None,
         prefix: str = "masked_lm_loss",
-        criterion_key: str = "masked_lm_loss",
         multiplier: float = 1.0,
         **metric_kwargs,
     ):
@@ -43,10 +43,10 @@ class MaskedLanguageModelCallback(CriterionCallback):
             input_key=input_key,
             output_key=output_key,
             multiplier=multiplier,
+            metric_fn=self.metric_fn,
             **metric_kwargs,
         )
-        self.criterion_key = criterion_key
-        self._criterion = None
+        self._criterion = nn.CrossEntropyLoss(ignore_index=-100)
 
     def metric_fn(
         self, s_logits: torch.Tensor, masked_lm_labels: torch.Tensor

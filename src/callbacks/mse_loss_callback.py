@@ -1,10 +1,11 @@
 from typing import Dict, List, Union
 
-from catalyst.core.callbacks import CriterionCallback
+from catalyst.core import MetricCallback
 import torch
+from torch import nn
 
 
-class MSELossCallback(CriterionCallback):
+class MSELossCallback(MetricCallback):
     """Callback to compute MSE loss"""
 
     def __init__(
@@ -12,7 +13,6 @@ class MSELossCallback(CriterionCallback):
         input_key: Union[str, List[str], Dict[str, str]] = None,
         output_key: Union[str, List[str], Dict[str, str]] = None,
         prefix: str = "mse_loss",
-        criterion_key: str = "mse_loss",
         multiplier: float = 1.0,
         **metric_kwargs,
     ):
@@ -28,8 +28,6 @@ class MSELossCallback(CriterionCallback):
                 If None, empty dict will be passed to the criterion.
             prefix (str): prefix for metrics and output key for loss
                 in ``state.batch_metrics`` dictionary
-            criterion_key (str): A key to take a criterion in case
-                there are several of them and they are in a dictionary format.
             multiplier (float): scale factor for the output loss.
         """
         if output_key is None:
@@ -43,10 +41,10 @@ class MSELossCallback(CriterionCallback):
             input_key=input_key,
             output_key=output_key,
             multiplier=multiplier,
+            metric_fn=self.metric_fn,
             **metric_kwargs,
         )
-        self.criterion_key = criterion_key
-        self._criterion = None
+        self._criterion = nn.MSELoss(reduction="mean")
 
     def metric_fn(
         self,

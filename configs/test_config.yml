@@ -69,19 +69,6 @@ stages:
     scheduler:
       callback: SchedulerCallback
       reduced_metric: *reduced_metric
-  criterion_params:
-    _key_value: True
-    cosine_loss:
-      criterion: CosineEmbeddingLoss
-      reduction: mean
-    masked_lm_loss:
-      criterion: CrossEntropyLoss
-    kl_div_loss:
-      criterion: KLDivLoss
-      reduction: batchmean
-    mse_loss:
-      criterion: MSELoss
-      reduction: mean
 
   # params specific for stage 1 called "train_val"
   train_val:

@@ -1,11 +1,11 @@
 from typing import Dict, List, Union
 
-from catalyst.core.callbacks import CriterionCallback
+from catalyst.core import MetricCallback
 import torch
 from torch import nn
 
 
-class CosineLossCallback(CriterionCallback):
+class CosineLossCallback(MetricCallback):
     """
     CosineLossCallback
     This callback is calculating cosine loss between hidden states
@@ -17,7 +17,6 @@ class CosineLossCallback(CriterionCallback):
         input_key: Union[str, List[str], Dict[str, str]] = None,
         output_key: Union[str, List[str], Dict[str, str]] = None,
         prefix: str = "cosine_loss",
-        criterion_key: str = "cosine_loss",
         multiplier: float = 1.0,
         **metric_kwargs,
     ):
@@ -48,9 +47,9 @@ class CosineLossCallback(CriterionCallback):
             input_key=input_key,
             output_key=output_key,
             multiplier=multiplier,
+            metric_fn=self.metric_fn,
             **metric_kwargs,
         )
-        self.criterion_key = criterion_key
         self._criterion = nn.CosineEmbeddingLoss(reduction="mean")
 
     def metric_fn(

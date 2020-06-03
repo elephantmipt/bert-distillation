@@ -1,11 +1,12 @@
 from typing import Dict, List, Union
 
-from catalyst.core.callbacks import CriterionCallback
+from catalyst.core import MetricCallback
 import torch
+from torch import nn
 import torch.nn.functional as F
 
 
-class KLDivLossCallback(CriterionCallback):
+class KLDivLossCallback(MetricCallback):
     """
     Callback to compute KL divergence loss
     """
@@ -15,7 +16,6 @@ class KLDivLossCallback(CriterionCallback):
         input_key: Union[str, List[str], Dict[str, str]] = None,
         output_key: Union[str, List[str], Dict[str, str]] = None,
         prefix: str = "kl_div_loss",
-        criterion_key: str = "kl_div_loss",
         multiplier: float = 1.0,
         temperature: float = 1.0,
         **metric_kwargs,
@@ -32,8 +32,6 @@ class KLDivLossCallback(CriterionCallback):
                 If None, empty dict will be passed to the criterion.
             prefix (str): prefix for metrics and output key for loss
                 in ``state.batch_metrics`` dictionary
-            criterion_key (str): A key to take a criterion in case
-                there are several of them and they are in a dictionary format.
             multiplier (float): scale factor for the output loss.
             temperature (float): temperature for distributions
         """
@@ -45,11 +43,11 @@ class KLDivLossCallback(CriterionCallback):
             input_key=input_key,
             output_key=output_key,
             multiplier=multiplier,
+            metric_fn=self.metric_fn,
             **metric_kwargs,
         )
-        self.criterion_key = criterion_key
         self.temperature = temperature
-        self._criterion = None
+        self._criterion = nn.KLDivLoss(reduction="batchmean")
 
     def metric_fn(
         self,

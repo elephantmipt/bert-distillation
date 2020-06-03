@@ -4,7 +4,6 @@ from catalyst.core import MetricAggregationCallback
 import pandas as pd
 import pytest  # noqa: F401
 import torch
-from torch import nn
 from torch.utils.data import DataLoader
 from transformers import (
     AutoConfig,
@@ -66,13 +65,6 @@ def test_runner():
     )
     loaders = {"train": train_dataloader, "valid": valid_dataloader}
 
-    criterion = {
-        "masked_lm_loss": nn.CrossEntropyLoss(),
-        "mse_loss": nn.MSELoss(),
-        "cosine_loss": nn.CosineEmbeddingLoss(),
-        "kl_div_loss": nn.KLDivLoss(reduction="batchmean"),
-    }
-
     callbacks = {
         "masked_lm_loss": MaskedLanguageModelCallback(),
         "mse_loss": MSELossCallback(),
@@ -98,7 +90,6 @@ def test_runner():
     runner.train(
         model=model,
         optimizer=optimizer,
-        criterion=criterion,
         loaders=loaders,
         verbose=True,
         check=True,
