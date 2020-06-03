@@ -1,9 +1,9 @@
 from catalyst import dl
 from catalyst.contrib.data.nlp import LanguageModelingDataset
+from catalyst.core import MetricAggregationCallback
 import pandas as pd
 import pytest  # noqa: F401
 import torch
-from catalyst.core import MetricAggregationCallback
 from torch import nn
 from torch.utils.data import DataLoader
 from transformers import (
@@ -12,6 +12,8 @@ from transformers import (
     BertForMaskedLM,
     DistilBertForMaskedLM,
 )
+from transformers.data.data_collator import DataCollatorForLanguageModeling
+
 from .callbacks import (
     CosineLossCallback,
     KLDivLossCallback,
@@ -19,8 +21,6 @@ from .callbacks import (
     MSELossCallback,
     PerplexityMetricCallback,
 )
-from transformers.data.data_collator import DataCollatorForLanguageModeling
-
 from .data import MLMDataset
 from .runners import DistilMLMRunner
 
@@ -70,7 +70,7 @@ def test_runner():
         "masked_lm_loss": nn.CrossEntropyLoss(),
         "mse_loss": nn.MSELoss(),
         "cosine_loss": nn.CosineEmbeddingLoss(),
-        "kl_div_loss": nn.KLDivLoss(reduction="batchmean")
+        "kl_div_loss": nn.KLDivLoss(reduction="batchmean"),
     }
 
     callbacks = {
@@ -85,11 +85,11 @@ def test_runner():
                 "cosine_loss": 1.0,
                 "masked_lm_loss": 1.0,
                 "kl_div_loss": 1.0,
-                "mse_loss": 1.0
-            }
+                "mse_loss": 1.0,
+            },
         ),
         "optimizer": dl.OptimizerCallback(),
-        "perplexity": PerplexityMetricCallback()
+        "perplexity": PerplexityMetricCallback(),
     }
 
     model = torch.nn.ModuleDict({"teacher": teacher, "student": student})
