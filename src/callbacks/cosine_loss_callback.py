@@ -16,7 +16,7 @@ class CosineLossCallback(CriterionCallback):
         self,
         input_key: Union[str, List[str], Dict[str, str]] = None,
         output_key: Union[str, List[str], Dict[str, str]] = None,
-        prefix: str = "loss",
+        prefix: str = "cosine_loss",
         criterion_key: str = "cosine_loss",
         multiplier: float = 1.0,
         **metric_kwargs,

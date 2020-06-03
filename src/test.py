@@ -3,12 +3,21 @@ from catalyst.contrib.data.nlp import LanguageModelingDataset
 import pandas as pd
 import pytest  # noqa: F401
 import torch
+from catalyst.core import MetricAggregationCallback
+from torch import nn
 from torch.utils.data import DataLoader
 from transformers import (
     AutoConfig,
     AutoTokenizer,
     BertForMaskedLM,
     DistilBertForMaskedLM,
+)
+from .callbacks import (
+    CosineLossCallback,
+    KLDivLossCallback,
+    MaskedLanguageModelCallback,
+    MSELossCallback,
+    PerplexityMetricCallback,
 )
 from transformers.data.data_collator import DataCollatorForLanguageModeling
 
@@ -57,16 +66,43 @@ def test_runner():
     )
     loaders = {"train": train_dataloader, "valid": valid_dataloader}
 
+    criterions = {
+        "masked_lm_loss": nn.CrossEntropyLoss(),
+        "mse_loss": nn.MSELoss(),
+        "cosine_loss": nn.CosineEmbeddingLoss(),
+        "kl_div_loss": nn.KLDivLoss(reduction="batchmean")
+    }
+
+    callbacks = {
+        "masked_lm_loss": MaskedLanguageModelCallback(),
+        "mse_loss": MSELossCallback(),
+        "cosine_loss": CosineLossCallback(),
+        "kl_div_loss": KLDivLossCallback(),
+        "loss": MetricAggregationCallback(
+            prefix="loss",
+            mode="weighted_sum",
+            metrics={
+                "cosine_loss": 1.0,
+                "masked_lm_loss": 1.0,
+                "kl_div_loss": 1.0,
+                "mse_loss": 1.0
+            }
+        ),
+        "optimizer": dl.OptimizerCallback(),
+        "perplexity": PerplexityMetricCallback()
+    }
+
     model = torch.nn.ModuleDict({"teacher": teacher, "student": student})
     runner = DistilMLMRunner()
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-5)
     runner.train(
         model=model,
         optimizer=optimizer,
+        criterion=criterions,
         loaders=loaders,
         verbose=True,
         check=True,
-        callbacks={"optimizer": dl.OptimizerCallback()},
+        callbacks=callbacks,
     )
     assert True
 

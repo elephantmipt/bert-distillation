@@ -81,7 +81,7 @@ stages:
       reduction: batchmean
     mse_loss:
       criterion: MSELoss
-      reduction: "mean"
+      reduction: mean
 
   # params specific for stage 1 called "train_val"
   train_val:
