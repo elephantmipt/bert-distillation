@@ -66,7 +66,7 @@ def test_runner():
     )
     loaders = {"train": train_dataloader, "valid": valid_dataloader}
 
-    criterions = {
+    criterion = {
         "masked_lm_loss": nn.CrossEntropyLoss(),
         "mse_loss": nn.MSELoss(),
         "cosine_loss": nn.CosineEmbeddingLoss(),
@@ -98,7 +98,7 @@ def test_runner():
     runner.train(
         model=model,
         optimizer=optimizer,
-        criterion=criterions,
+        criterion=criterion,
         loaders=loaders,
         verbose=True,
         check=True,
