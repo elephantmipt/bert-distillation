@@ -44,6 +44,8 @@ stages:
     cosine_loss:
       callback: CosineLossCallback
       prefix: cosine
+    masked_lm_loss:
+      callback: MaskedLanguageModelCallback
     optimizer:
       callback: OptimizerCallback
     scheduler:
@@ -53,6 +55,8 @@ stages:
     _key_value: True
     cosine_loss:
       criterion: CosineEmbeddingLoss
+    masked_lm_loss:
+      criterion: CrossEntropyLoss
 
   # params specific for stage 1 called "train_val"
   train_val:

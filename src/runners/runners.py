@@ -62,6 +62,8 @@ class DistilMLMRunner(dl.Runner):
         self.state.output["attention_mask"] = attention_mask
         self.state.output["t_hidden_states"] = t_hidden_states
         self.state.output["s_hidden_states"] = s_hidden_states
+        self.state.output["s_logits"] = s_logits
+        self.state.output["t_logits"] = t_logits
 
         mask = attention_mask.unsqueeze(-1).expand_as(s_logits)
         # (bs, seq_lenth, voc_size)
