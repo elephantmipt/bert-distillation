@@ -41,6 +41,15 @@ stages:
   # callbacks serve to calculate loss and metric,
   # update model weights, save checkpoint etc.
   callbacks_params:
+    loss_aggregator:
+      callback: MetricAggregationCallback
+      mode: weighted_sum
+      metrics:
+        cosine_loss: 1.0
+        masked_lm_loss: 1.0
+        kl_div_loss: 1.0
+        mse_loss: 1.0
+      prefix: loss
     cosine_loss:
       callback: CosineLossCallback
       prefix: cosine_loss
@@ -53,6 +62,8 @@ stages:
     mse_loss:
       callback: MSELossCallback
       prefix: mse_loss
+    perplexity:
+      callback: PerplexityMetricCallback
     optimizer:
       callback: OptimizerCallback
     scheduler:
@@ -62,12 +73,15 @@ stages:
     _key_value: True
     cosine_loss:
       criterion: CosineEmbeddingLoss
+      reduction: mean
     masked_lm_loss:
       criterion: CrossEntropyLoss
     kl_div_loss:
       criterion: KLDivLoss
+      reduction: batchmean
     mse_loss:
       criterion: MSELoss
+      reduction: "mean"
 
   # params specific for stage 1 called "train_val"
   train_val:

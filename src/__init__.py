@@ -8,6 +8,7 @@ from .callbacks import (
     KLDivLossCallback,
     MaskedLanguageModelCallback,
     MSELossCallback,
+    PerplexityMetricCallback,
 )
 from .experiment import Experiment  # noqa: F401
 from .models import BertForMLM, DistilbertStudentModel
@@ -29,3 +30,4 @@ registry.Callback(CosineLossCallback)
 registry.Callback(MaskedLanguageModelCallback)
 registry.Callback(KLDivLossCallback)
 registry.Callback(MSELossCallback)
+registry.Callback(PerplexityMetricCallback)
