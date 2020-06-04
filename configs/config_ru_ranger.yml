@@ -2,10 +2,10 @@
 # for detailed comments on this configuration file
 model_params:
   _key_value: true
-  teacher: 
+  teacher:
     model: BertForMLM
     model_name: "DeepPavlov/rubert-base-cased"
-  student: 
+  student:
     model: DistilbertStudentModel
     teacher_model_name: "DeepPavlov/rubert-base-cased"
 
@@ -30,7 +30,7 @@ stages:
     shuffle: True
 
   state_params:
-    main_metric: &reduced_metric loss
+    main_metric: loss
     minimize_metric: True
 
   # callbacks serve to calculate loss and metric,
@@ -55,13 +55,11 @@ stages:
     scheduler:
       callback: SchedulerCallback
       reduced_metric: loss
-      
     wandb_loger:
       callback: WandbLogger
       config:
         lr: 0.0001
         optimizer: Ranger
-        
   scheduler_params:
       gamma: 0.3
       milestones:
