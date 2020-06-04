@@ -1,5 +1,6 @@
 from catalyst import dl
 from catalyst.contrib.data.nlp import LanguageModelingDataset
+from catalyst.core import MetricAggregationCallback
 import pandas as pd
 import pytest  # noqa: F401
 import torch
@@ -12,6 +13,13 @@ from transformers import (
 )
 from transformers.data.data_collator import DataCollatorForLanguageModeling
 
+from .callbacks import (
+    CosineLossCallback,
+    KLDivLossCallback,
+    MaskedLanguageModelCallback,
+    MSELossCallback,
+    PerplexityMetricCallback,
+)
 from .data import MLMDataset
 from .runners import DistilMLMRunner
 
@@ -57,6 +65,25 @@ def test_runner():
     )
     loaders = {"train": train_dataloader, "valid": valid_dataloader}
 
+    callbacks = {
+        "masked_lm_loss": MaskedLanguageModelCallback(),
+        "mse_loss": MSELossCallback(),
+        "cosine_loss": CosineLossCallback(),
+        "kl_div_loss": KLDivLossCallback(),
+        "loss": MetricAggregationCallback(
+            prefix="loss",
+            mode="weighted_sum",
+            metrics={
+                "cosine_loss": 1.0,
+                "masked_lm_loss": 1.0,
+                "kl_div_loss": 1.0,
+                "mse_loss": 1.0,
+            },
+        ),
+        "optimizer": dl.OptimizerCallback(),
+        "perplexity": PerplexityMetricCallback(),
+    }
+
     model = torch.nn.ModuleDict({"teacher": teacher, "student": student})
     runner = DistilMLMRunner()
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-5)
@@ -66,7 +93,7 @@ def test_runner():
         loaders=loaders,
         verbose=True,
         check=True,
-        callbacks={"optimizer": dl.OptimizerCallback()},
+        callbacks=callbacks,
     )
     assert True
 

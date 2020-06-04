@@ -4,9 +4,13 @@ WORKDIR /exp
 
 RUN apt-get update -y
 
-RUN apt install libglib2.0-0 -y
+RUN apt-get install libglib2.0-0 -y \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN apt install -y libsm6 libxext6 libxrender-dev wget gzip
+RUN apt-get install -y libsm6 libxext6 libxrender-dev wget gzip \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY . .
 

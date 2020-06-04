@@ -1,18 +1,11 @@
 # Refer to configs/config-description-eng.yml
 # for detailed comments on this configuration file
-
-runner_params:
-  alpha_kl: 0.5
-  alpha_cos: 0.5
-  alpha_mlm: 0.001
-  alpha_mse: 0.0
-
 model_params:
   _key_value: true
-  teacher: 
+  teacher:
     model: BertForMLM
     model_name: "DeepPavlov/rubert-base-cased"
-  student: 
+  student:
     model: DistilbertStudentModel
     teacher_model_name: "DeepPavlov/rubert-base-cased"
 
@@ -20,7 +13,7 @@ args:
   # where to look for __init__.py file
   expdir: "src"
   # store logs in this subfolder
-  baselogdir: "./logs/distilbert_mult_start"
+  baselogdir: "./logs/distilbert_ru"
 
 # common settings for all stages
 stages:
@@ -29,37 +22,44 @@ stages:
     batch_size: 2
     num_workers: 4
     path_to_data: "./data"
-    train_filename: "train_small.csv"
-    valid_filename: "valid_small.csv"
+    train_filename: "train.csv"
+    valid_filename: "valid.csv"
     text_field: "text"
     model_name: "DeepPavlov/rubert-base-cased"
     max_sequence_length: 256
     shuffle: True
 
   state_params:
-    main_metric: &reduced_metric loss
+    main_metric: loss
     minimize_metric: True
-
-  # scheduler controls learning rate during training
-  scheduler_params:
-    scheduler: ReduceLROnPlateau
 
   # callbacks serve to calculate loss and metric,
   # update model weights, save checkpoint etc.
   callbacks_params:
+    cosine_loss:
+      callback: CosineLossCallback
+      prefix: cosine_loss
+    kl_div_loss:
+      callback: KLDivLossCallback
+      prefix: kl_div_loss
+    loss_aggregator:
+      callback: MetricAggregationCallback
+      mode: weighted_sum
+      metrics:
+        cosine_loss: 1.0
+        kl_div_loss: 1.0
+      prefix: loss
     optimizer:
       callback: OptimizerCallback
       accumulation_steps: 8
     scheduler:
       callback: SchedulerCallback
-      reduced_metric: *reduced_metric
-      
+      reduced_metric: loss
     wandb_loger:
       callback: WandbLogger
       config:
         lr: 0.0001
         optimizer: Ranger
-        
   scheduler_params:
       gamma: 0.3
       milestones:
@@ -71,7 +71,7 @@ stages:
   # params specific for stage 1 called "train_val"
   train_val:
     state_params:
-      num_epochs: 150
+      num_epochs: 120
     optimizer_params:
       optimizer: Ranger
       lr: 0.0001

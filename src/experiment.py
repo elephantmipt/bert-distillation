@@ -90,12 +90,16 @@ class Experiment(ConfigExperiment):
             texts=train_df[text_field],
             max_seq_length=max_sequence_length,
             tokenizer=tokenizer,
+            sort=False,
+            lazy=True,
         )
 
         valid_dataset = LanguageModelingDataset(
             texts=valid_df[text_field],
             max_seq_length=max_sequence_length,
             tokenizer=tokenizer,
+            sort=False,
+            lazy=True,
         )
 
         datasets["train"] = train_dataset
