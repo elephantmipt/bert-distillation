@@ -2,7 +2,7 @@ from typing import Dict
 from collections import OrderedDict
 
 from catalyst import dl
-from catalyst.dl.utils import is_wrapped_with_ddp
+from catalyst.dl.utils import check_ddp_wrapped
 import torch
 
 
@@ -10,7 +10,7 @@ class DistilMLMRunner(dl.Runner):
     """Simplified huggingface Distiller wrapped with catalyst"""
 
     def _handle_batch(self, batch: Dict[str, torch.Tensor]):
-        if is_wrapped_with_ddp(self.model):
+        if check_ddp_wrapped(self.model):
             teacher, student = (
                 self.model.module["teacher"],
                 self.model.module["student"],

@@ -18,7 +18,7 @@ from .callbacks import (
     KLDivLossCallback,
     MaskedLanguageModelCallback,
     MSELossCallback,
-    PerplexityMetricCallback,
+    PerplexityMetricCallbackDistillation,
 )
 from .data import MLMDataset
 from .runners import DistilMLMRunner
@@ -81,7 +81,7 @@ def test_runner():
             },
         ),
         "optimizer": dl.OptimizerCallback(),
-        "perplexity": PerplexityMetricCallback(),
+        "perplexity": PerplexityMetricCallbackDistillation(),
     }
 
     model = torch.nn.ModuleDict({"teacher": teacher, "student": student})

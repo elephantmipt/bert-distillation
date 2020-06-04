@@ -1,4 +1,3 @@
-from catalyst.contrib.dl.callbacks.wandb import WandbLogger
 from catalyst.dl import registry
 from torch_optimizer import Ranger
 
@@ -7,7 +6,7 @@ from .callbacks import (
     KLDivLossCallback,
     MaskedLanguageModelCallback,
     MSELossCallback,
-    PerplexityMetricCallback,
+    PerplexityMetricCallbackDistillation,
 )
 from .experiment import Experiment  # noqa: F401
 from .models import BertForMLM, DistilbertStudentModel
@@ -18,10 +17,8 @@ registry.Model(DistilbertStudentModel)
 
 registry.Optimizer(Ranger)
 
-registry.Callback(WandbLogger)
-
 registry.Callback(CosineLossCallback)
 registry.Callback(MaskedLanguageModelCallback)
 registry.Callback(KLDivLossCallback)
 registry.Callback(MSELossCallback)
-registry.Callback(PerplexityMetricCallback)
+registry.Callback(PerplexityMetricCallbackDistillation)

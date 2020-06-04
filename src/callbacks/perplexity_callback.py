@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 
-class PerplexityMetricCallback(MetricCallback):
+class PerplexityMetricCallbackDistillation(MetricCallback):
     """
     Perplexity is a very popular metric in NLP
     especially in Language Modeling task.

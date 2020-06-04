@@ -63,7 +63,7 @@ stages:
       callback: MSELossCallback
       prefix: mse_loss
     perplexity:
-      callback: PerplexityMetricCallback
+      callback: PerplexityMetricCallbackDistillation
     optimizer:
       callback: OptimizerCallback
     scheduler:
