@@ -27,9 +27,9 @@ class DistilMLMRunner(dl.Runner):
 
         s_logits, s_hidden_states = student(batch["input_ids"], attention_mask)
 
-        self.state.output = OrderedDict()
-        self.state.output["attention_mask"] = attention_mask
-        self.state.output["t_hidden_states"] = t_hidden_states
-        self.state.output["s_hidden_states"] = s_hidden_states
-        self.state.output["s_logits"] = s_logits
-        self.state.output["t_logits"] = t_logits
+        self.output = OrderedDict()
+        self.output["attention_mask"] = attention_mask
+        self.output["t_hidden_states"] = t_hidden_states
+        self.output["s_hidden_states"] = s_hidden_states
+        self.output["s_logits"] = s_logits
+        self.output["t_logits"] = t_logits

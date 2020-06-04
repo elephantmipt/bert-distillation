@@ -1,5 +1,6 @@
 from typing import Dict, Union
 from collections import OrderedDict
+import logging
 from pathlib import Path
 
 from catalyst.contrib.data.nlp import LanguageModelingDataset
@@ -9,6 +10,8 @@ import pandas as pd
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 from transformers.data.data_collator import DataCollatorForLanguageModeling
+
+logging.getLogger("transformers.tokenization_utils").setLevel(logging.ERROR)
 
 
 class Experiment(ConfigExperiment):
