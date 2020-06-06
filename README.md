@@ -5,7 +5,7 @@
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Notebook%20API/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Config%20API/badge.svg?branch=master&event=push)
 
-![logo](imgs/logo.png&s=200)
+![logo](imgs/logo_small.png)
 
 This project is about BERT distillation.
 The goal is to distillate any BERT based on any language with convenient high-level API, reproducibility and all new GPU's features.
