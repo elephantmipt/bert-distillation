@@ -1,21 +1,55 @@
+<div align="center">
+
 # Bert Distillation
 
+![logo](imgs/logo_small.png)
+
 [![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
+
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Linter/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Notebook%20API/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Config%20API/badge.svg?branch=master&event=push)
 
+This project is about BERT distillation.
+
+The goal is to distillate any BERT based on any language with convenient high-level API, reproducibility and all new GPU's features.
+
+</div>
+
+### Features
+- various losses
+- distributed training
+- fp16
+- logging with tensorboard, wandb etc
+- catalyst framework
+
+### A Brief Inquiry
+
+<img align="right" height="500" hspace="30px" vspace="30px" src="imgs/distillation_schema.png">
+
+Not so far ago Hugging Face team published [paper](https://arxiv.org/abs/1910.01108) about DistilBERT model. 
+The idea is to transfer knowledge from big student model to smaller student model.
+
+First of all we need a well trained teacher model.
+
+Let's take 6 encoders instead of 12! 
+We should initialize our small model's layers with teachers layers.
+
+Instead of train our model for a long time on masked language model task we can add to our casual loss KL divergence and cosine loss between student and teacher as we know that a teacher is well trained.
+
+As shown in the paper this method leads to small quality decreasing, reduce model size and speed up inference especially on mobile devices.
+
+### Folders
 
 1. `bin` - bash files for running pipelines
 2. `configs` - just place configs here
 3. `docker` - project Docker files for pure reproducibility
-4. `presets` - datasets, notebooks, etc - all you don't need to push to git
-5. `requirements` - different project python requirements for docker, tests, CI, etc
-6. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
-7. `serving` - microservices, etc - production
-8. `src` - model, experiment, etc - research
+4. `requirements` - different project python requirements for docker, tests, CI, etc
+5. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
+6. `src` - model, experiment, etc - research
 
 ## Usage
+Here is an example for Russian BERT
 ```
 git clone https://github.com/PUSSYMIPT/bert-distillation.git
 cd bert-distillation
@@ -46,6 +80,3 @@ docker run {your container id}
 5. run `catalyst-check-codestyle`
 6. if exit code is not 0 refactor your code
 7. commit!
-
-Also read this at least once
-https://www.notion.so/Engineering-Guidelines-cc80b8268eed43d6a96b12aa8444b4ca

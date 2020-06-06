@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 def main(args):
     """Splitting dataset"""
     df = pd.read_csv("data/lenta-ru-news.csv", usecols=["text"]).dropna()
-    if args.small:
+    if args.sample is not None:
         print(f"sampling {args.sample} texts")
         df = df.sample(args.sample, random_state=args.sample)
     train, valid = train_test_split(
@@ -25,8 +25,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--small", action="store_true")
     parser.add_argument("--random_state", default=42, type=int, required=False)
-    parser.add_argument("--sample", default=15000, type=int, required=False)
+    parser.add_argument("--sample", default=None, type=int, required=False)
     args = parser.parse_args()
     main(args)
