@@ -1,3 +1,5 @@
+<div align="center">
+
 # Bert Distillation
 
 [![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
@@ -9,6 +11,8 @@
 
 This project is about BERT distillation.
 The goal is to distillate any BERT based on any language with convenient high-level API, reproducibility and all new GPU's features.
+
+</div>
 
 ### Features
 - various losses
