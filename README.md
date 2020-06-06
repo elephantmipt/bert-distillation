@@ -5,6 +5,7 @@
 ![logo](imgs/logo_small.png)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
+
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Linter/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Notebook%20API/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Config%20API/badge.svg?branch=master&event=push)
@@ -24,7 +25,10 @@ The goal is to distillate any BERT based on any language with convenient high-le
 
 ### A Brief Inquiry
 
-Not so far ago Hugging Face team published paper about DistilBERT model. The idea
+Not so far ago Hugging Face team published paper about DistilBERT model. The idea is to transfer knowledge from big student model to smaller student model.
+![schema](imgs/distillation_schema.png) 
+
+We can initialize student's layers with teacher's to speed up this process. Also we can use various losses.
 
 ### Folders
 
