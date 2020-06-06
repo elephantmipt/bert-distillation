@@ -2,14 +2,15 @@
 
 # Bert Distillation
 
+![logo](imgs/logo_small.png)
+
 [![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Linter/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Notebook%20API/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Config%20API/badge.svg?branch=master&event=push)
 
-![logo](imgs/logo_small.png)
-
 This project is about BERT distillation.
+
 The goal is to distillate any BERT based on any language with convenient high-level API, reproducibility and all new GPU's features.
 
 </div>
