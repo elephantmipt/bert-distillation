@@ -33,7 +33,10 @@ The idea is to transfer knowledge from big student model to smaller student mode
 Let's take 6 encoders instead of 12! 
 We should initialize our small model's layers with teachers layers.
 
-Instead of train our model for a long time on masked language model task we can add to our casual loss KL divergence and cosine loss between student and teacher as we know that a teacher is well trained. 
+Instead of train our model for a long time on masked language model task we can add to our casual loss KL divergence and cosine loss between student and teacher as we know that a teacher is well trained.
+
+As shown in the paper this method leads to small quality decreasing, reduce model size and speed up inference especially on mobile devices.
+
 
 
 ### Folders
