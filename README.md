@@ -5,15 +5,30 @@
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Notebook%20API/badge.svg?branch=master&event=push)
 ![codestyle](https://github.com/PUSSYMIPT/bert-distillation/workflows/Config%20API/badge.svg?branch=master&event=push)
 
+![logo](imgs/logo.png&s=200)
+
+This project is about BERT distillation.
+The goal is to distillate any BERT based on any language with convenient high-level API, reproducibility and all new GPU's features.
+
+### Features
+- various losses
+- distributed training
+- fp16
+- logging with tensorboard, wandb etc
+- catalyst framework
+
+### A Brief Inquiry
+
+Not so far ago Hugging Face team published paper about DistilBERT model. The idea
+
+### Folders
 
 1. `bin` - bash files for running pipelines
 2. `configs` - just place configs here
 3. `docker` - project Docker files for pure reproducibility
-4. `presets` - datasets, notebooks, etc - all you don't need to push to git
-5. `requirements` - different project python requirements for docker, tests, CI, etc
-6. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
-7. `serving` - microservices, etc - production
-8. `src` - model, experiment, etc - research
+4. `requirements` - different project python requirements for docker, tests, CI, etc
+5. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
+6. `src` - model, experiment, etc - research
 
 ## Usage
 ```
