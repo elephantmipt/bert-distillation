@@ -30,14 +30,14 @@ The goal is to distillate any BERT based on any language with convenient high-le
 Not so far ago Hugging Face team published [paper](https://arxiv.org/abs/1910.01108) about DistilBERT model. 
 The idea is to transfer knowledge from big student model to smaller student model.
 
+First of all we need a well trained teacher model.
+
 Let's take 6 encoders instead of 12! 
 We should initialize our small model's layers with teachers layers.
 
 Instead of train our model for a long time on masked language model task we can add to our casual loss KL divergence and cosine loss between student and teacher as we know that a teacher is well trained.
 
 As shown in the paper this method leads to small quality decreasing, reduce model size and speed up inference especially on mobile devices.
-
-
 
 ### Folders
 
@@ -49,6 +49,7 @@ As shown in the paper this method leads to small quality decreasing, reduce mode
 6. `src` - model, experiment, etc - research
 
 ## Usage
+Here is an example for Russian BERT
 ```
 git clone https://github.com/PUSSYMIPT/bert-distillation.git
 cd bert-distillation
@@ -79,6 +80,3 @@ docker run {your container id}
 5. run `catalyst-check-codestyle`
 6. if exit code is not 0 refactor your code
 7. commit!
-
-Also read this at least once
-https://www.notion.so/Engineering-Guidelines-cc80b8268eed43d6a96b12aa8444b4ca
