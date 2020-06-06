@@ -26,9 +26,14 @@ The goal is to distillate any BERT based on any language with convenient high-le
 ### A Brief Inquiry
 
 <img align="right" height="500" hspace="30px" vspace="30px" src="imgs/distillation_schema.png">
-Not so far ago Hugging Face team published paper about DistilBERT model. 
-The idea is to transfer knowledge from big student model to smaller student model. We can initialize student's layers with teacher's to speed up this process. 
-Also we can use various losses.
+
+Not so far ago Hugging Face team published [paper](https://arxiv.org/abs/1910.01108) about DistilBERT model. 
+The idea is to transfer knowledge from big student model to smaller student model.
+
+Let's take 6 encoders instead of 12! 
+We should initialize our small model's layers with teachers layers.
+
+Instead of train our model for a long time on masked language model task we can add to our casual loss KL divergence and cosine loss between student and teacher as we know that a teacher is well trained. 
 
 
 ### Folders
