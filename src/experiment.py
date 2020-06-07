@@ -3,10 +3,10 @@ from collections import OrderedDict
 import logging
 from pathlib import Path
 
-from catalyst.contrib.data.nlp import LanguageModelingDataset
 from catalyst.dl import ConfigExperiment, utils
 from catalyst.tools.typing import Model, Optimizer
 import pandas as pd
+from src.data import LanguageModelingDataset
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 from transformers.data.data_collator import DataCollatorForLanguageModeling

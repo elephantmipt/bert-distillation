@@ -1,5 +1,5 @@
-from .dataset import MLMDataset
+from .dataset import LanguageModelingDataset
 
 __all__ = [
-    "MLMDataset",
+    "LanguageModelingDataset",
 ]
