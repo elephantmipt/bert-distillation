@@ -49,6 +49,7 @@ Let's briefly take a look on a Notebook API. First of all we should do all neces
 ```python
 from catalyst import dl
 from catalyst.contrib.data.nlp import LanguageModelingDataset
+from catalyst.contrib.nn.optimizers import RAdam
 from catalyst.core import MetricAggregationCallback
 import pandas as pd
 import torch
@@ -134,7 +135,7 @@ Finally, run an experiment!
 
 ```python
 runner = DistilMLMRunner()
-optimizer = torch.optim.Adam(model.parameters(), lr=5e-5)
+optimizer = RAdam(model.parameters(), lr=5e-5)
 runner.train(
     model=model,
     optimizer=optimizer,
@@ -143,6 +144,91 @@ runner.train(
     num_epochs=10,  # epochs number
     callbacks=callbacks,
 )
+```
+
+### Config API
+
+But what about more product-ready solution?
+
+Here is a minimal example for config API. All yo need to do is to write your config.yml file.
+
+```yaml
+model_params:  # defining our models
+  _key_value: true
+  teacher:
+    model: BertForMLM
+    model_name: "bert-base-cased"  # hugging face hub model name
+  student:
+    model: DistilbertStudentModel
+    teacher_model_name: "bert-base-cased"
+
+args:
+  # where to look for __init__.py file
+  expdir: "src"
+  # store logs in this subfolder
+  baselogdir: "./logs/distilbert"
+
+# common settings for all stages
+stages:
+  # PyTorch loader params
+  data_params:
+    batch_size: 2
+    num_workers: 0
+    path_to_data: "./data"
+    train_filename: "train.csv"
+    valid_filename: "valid.csv"
+    text_field: "text"
+    model_name: "bert-base-uncased"
+    max_sequence_length: 300
+    shuffle: True
+
+  state_params:
+    main_metric: &reduced_metric loss
+    minimize_metric: True
+
+  # scheduler controls learning rate during training
+  scheduler_params:
+    scheduler: ReduceLROnPlateau
+
+  # callbacks serve to calculate loss and metric,
+  # update model weights, save checkpoint etc.
+  callbacks_params:
+    loss_aggregator:
+      callback: MetricAggregationCallback
+      mode: weighted_sum
+      metrics:
+        cosine_loss: 1.0
+        masked_lm_loss: 1.0
+        kl_div_loss: 1.0
+        mse_loss: 1.0
+      prefix: loss
+    cosine_loss:
+      callback: CosineLossCallback
+      prefix: cosine_loss
+    masked_lm_loss:
+      callback: MaskedLanguageModelCallback
+      prefix: masked_lm_loss
+    kl_div_loss:
+      callback: KLDivLossCallback
+      prefix: kl_div_loss
+    mse_loss:
+      callback: MSELossCallback
+      prefix: mse_loss
+    perplexity:
+      callback: PerplexityMetricCallbackDistillation
+    optimizer:
+      callback: OptimizerCallback
+    scheduler:
+      callback: SchedulerCallback
+      reduced_metric: *reduced_metric
+
+  # params specific for stage 1 called "train_val"
+  train_val:
+    state_params:
+      num_epochs: 1
+    optimizer_params:
+      optimizer: RAdam
+      lr: 0.00005
 ```
 
 ### Folders
