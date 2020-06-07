@@ -80,7 +80,7 @@ train_df = pd.read_csv("data/train.csv")
 valid_df = pd.read_csv("data/valid.csv")
 ```
 
-Next we should initialize our data loaders
+Next we should initialize our data loaders.
 
 ```python
 tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")  # your teacher's model tokenizer
@@ -231,14 +231,25 @@ stages:
       lr: 0.00005
 ```
 
+And then run it with catalyst:
+
+```shell script
+catalyst-dl run -C config.yml --verbose
+```
+We can add distributed training and fp16:
+```shell script
+catalyst-dl run -C config.yml --verbose --distributed --fp16
+```
+
 ### Folders
 
 1. `bin` - bash files for running pipelines
 2. `configs` - just place configs here
 3. `docker` - project Docker files for pure reproducibility
-4. `requirements` - different project python requirements for docker, tests, CI, etc
-5. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
-6. `src` - model, experiment, etc - research
+4. `examples` - examples of using this project
+5. `requirements` - different project python requirements for docker, tests, CI, etc
+6. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
+7. `src` - model, experiment, etc - research
 
 ### Docker
 
