@@ -113,9 +113,9 @@ The next thing is callbacks:
 ```python
 callbacks = {
     "masked_lm_loss": MaskedLanguageModelCallback(),  # standard MLM loss
-    "mse_loss": MSELossCallback(),  # MSE loss between student and children distributions on masked positions
+    "mse_loss": MSELossCallback(),  # MSE loss between student and student distributions on masked positions
     "cosine_loss": CosineLossCallback(),  # cosine loss between hidden states
-    "kl_div_loss": KLDivLossCallback(),  # KL divergence between student and children distributions on masked positions 
+    "kl_div_loss": KLDivLossCallback(),  # KL divergence between student and student distributions on masked positions 
     "loss": MetricAggregationCallback(
         prefix="loss",
         mode="weighted_sum",
