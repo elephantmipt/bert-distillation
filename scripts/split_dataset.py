@@ -15,7 +15,7 @@ def main(args):
     )
     train = train.reset_index()
     valid = valid.reset_index()
-    if args.small:
+    if args.sample is not None:
         train.to_csv("data/train_small.csv")
         valid.to_csv("data/valid_small.csv")
     else:
