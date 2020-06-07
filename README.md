@@ -251,18 +251,11 @@ catalyst-dl run -C config.yml --verbose --distributed --fp16
 6. `scripts` - data preprocessing scripts, utils, everything like `python scripts/.py`
 7. `src` - model, experiment, etc - research
 
-### Docker
-
-I also add dockerfile.
-```
-git clone https://github.com/PUSSYMIPT/bert-distillation.git
-cd bert-distillation
-docker build -f docker/Dockerfile  # yields container id
-docker run {your container id}
-```
-
-
 ## Contribution
+
+Firstly let's discuss feature you want to see in this project. You can use feature request issue template.
+
+After that you can write your code following this simple steps:
 
 1. Clone repository
 2. run `pip install -r requirements/requirements-dev.txt -r requirements/requirements.txt`
