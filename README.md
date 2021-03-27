@@ -2,6 +2,8 @@
 
 # Bert Distillation
 
+_For more general pipeline please follow [compressors](https://github.com/elephantmipt/compressors) library and [BERT distillation example][https://github.com/elephantmipt/compressors/blob/master/examples/classification_transformers_catalyst.py]. This project is not supported by me anymore._
+
 ![logo](imgs/logo_small.png)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/pussymipt/bert-distillation/badge)](https://www.codefactor.io/repository/github/pussymipt/bert-distillation)
