@@ -2,7 +2,7 @@
 
 # Bert Distillation
 
-_For more general pipeline please follow [compressors](https://github.com/elephantmipt/compressors) library and [BERT distillation example][https://github.com/elephantmipt/compressors/blob/master/examples/classification_transformers_catalyst.py]. This project is not supported by me anymore._
+_For more general pipeline please follow [compressors](https://github.com/elephantmipt/compressors) library and [BERT distillation example](https://github.com/elephantmipt/compressors/blob/master/examples/classification_transformers_catalyst.py). This project is not supported by me anymore._
 
 ![logo](imgs/logo_small.png)
 
